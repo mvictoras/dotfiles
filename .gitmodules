@@ -2,3 +2,6 @@
 	path = dotbot
 	url = https://github.com/anishathalye/dotbot
 	ignore = dirty
+[submodule "SpaceVim"]
+	path = SpaceVim
+	url = https://github.com/SpaceVim/SpaceVim.git
