@@ -1,0 +1,13 @@
+- defaults:
+    link:
+      relink: true
+
+- clean: ['~']
+
+- link:
+    ~/.vim: SpaceVim
+    ~/.SpaceVim.d: SpaceVim.d
+    ~/bash_profile: bash_profile_alcf
+
+- shell:
+  - [git submodule update --init --recursive, Installing submodules]
