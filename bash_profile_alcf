@@ -11,3 +11,12 @@ PATH=$PATH:$HOME/.local/bin:$HOME/bin
 
 export PATH
 export GRAND=/lus/grand/projects/visualization/mvictoras
+
+if [[ $HOSTNAME = *theta* ]]; then
+  module load tmux
+fi
+
+if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
+  tmux -CC attach -t default || tmux -CC new -s default
+fi
+
