@@ -2,7 +2,7 @@
 
 set -e
 
-CONFIG="alcf.conf.yaml"
+CONFIG="mac.conf.yaml"
 DOTBOT_DIR="dotbot"
 
 DOTBOT_BIN="bin/dotbot"

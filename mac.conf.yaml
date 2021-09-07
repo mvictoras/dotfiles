@@ -7,10 +7,7 @@
 - link:
     ~/.vim: SpaceVim
     ~/.SpaceVim.d: SpaceVim.d
-    ~/.bash_profile: alcf/bash_profile
-    ~/.bashrc: alcf/bashrc
-    ~/.zshrc: alcf/zshrc
-    ~/.zshenv: alcf/zshenv
+    ~/.zshrc: mac/zshrc
 
 - shell:
   - [git submodule update --init --recursive, Installing submodules]
