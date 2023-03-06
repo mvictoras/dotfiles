@@ -7,7 +7,7 @@
 - link:
     ~/.vim: SpaceVim
     ~/.SpaceVim.d: SpaceVim.d
-    ~/.zshrc: mac/zshrc
+    ~/.zshrc: sites/mac/zshrc
 
 - shell:
   - [git submodule update --init --recursive, Installing submodules]
