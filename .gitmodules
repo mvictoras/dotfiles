@@ -7,4 +7,4 @@
 	url = https://github.com/SpaceVim/SpaceVim.git
 [submodule "modules/ohmyzsh"]
 	path = modules/ohmyzsh
-	url = git@github.com:ohmyzsh/ohmyzsh.git
+	url = https://github.com/ohmyzsh/ohmyzsh.git
