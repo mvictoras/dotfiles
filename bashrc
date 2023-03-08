@@ -14,3 +14,5 @@ if ( echo `hostname` | grep -sq 'cc' ); then
 fi
 
 export LD_PRELOAD=""
+export PATH="/lus/theta-fs0/projects/visualization/vray/bin/":$PATH
+export LD_LIBRARY_PATH="/lus/theta-fs0/projects/visualization/vray/lib/":$LD_LIBRARY_PATH
