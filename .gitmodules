@@ -8,3 +8,6 @@
 [submodule "spack-config"]
 	path = spack-config
 	url = git@git.cels.anl.gov:vmateevitsi/spack-config.git
+[submodule "modules/ohmyzsh"]
+	path = modules/ohmyzsh
+	url = https://github.com/ohmyzsh/ohmyzsh.git
