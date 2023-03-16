@@ -23,6 +23,7 @@
     buffer_index_type = 4
     enable_tabline_filetype_icon = true
     enable_statusline_mode = false
+    bootstrap_before = 'myspacevim#before'
 
 # Enable autocomplete layer
 [[layers]]
@@ -34,3 +35,7 @@ auto_completion_tab_key_behavior = "smart"
 name = 'shell'
 default_position = 'top'
 default_height = 30
+
+[[custom_plugins]]
+    name = 'https://gitlab.com/code-stats/code-stats-vim'
+    merged = false

@@ -7,6 +7,11 @@
 - link:
     ~/.vim: SpaceVim
     ~/.SpaceVim.d: SpaceVim.d
+    ~/.bash_profile: sites/alcf/bash_profile
+    ~/.bashrc: sites/alcf/bashrc
+    ~/.zshrc: sites/alcf/zshrc
+    ~/.zshenv: sites/alcf/zshenv
+    ~/.spack: spack-config
 
 - shell:
   - [git submodule update --init --recursive, Installing submodules]
