@@ -126,4 +126,9 @@ unset __conda_setup
 # <<< conda initialize <<<
 
 alias scp='noglob scp'
+alias vi /usr/local/bin/vi
+alias vim /usr/local/bin/vim
 export PATH="/usr/local/sbin:$PATH"
+export GEM_HOME=$HOME/.gem 
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
