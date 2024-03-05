@@ -2,6 +2,17 @@
 
 set -e
 
+# Install zsh
+if [[ ! -d ~/.oh-my-zsh ]]; then
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+fi
+
+# Install SpaceVim
+if [[ ! -d ~/.vim ]]; then
+  curl -sLf https://spacevim.org/install.sh | bash
+fi
+
+
 CONFIG="mac.conf.yaml"
 CONFIG_DIR="confs"
 DOTBOT_DIR="dotbot"
