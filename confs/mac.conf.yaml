@@ -5,7 +5,7 @@
 - clean: ['~']
 
 - link:
-    ~/.vim: SpaceVim
+    ~/.vim: modules/SpaceVim
     ~/.SpaceVim.d: SpaceVim.d
     ~/.zshrc: sites/mac/zshrc
 
