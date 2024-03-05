@@ -12,6 +12,11 @@ if [[ ! -d ~/.vim ]]; then
   curl -sLf https://spacevim.org/install.sh | bash
 fi
 
+if [[ ! -d ~/.antidote ]]; then
+  # first, run this from an interactive zsh terminal session:
+  git clone --depth=1 https://github.com/mattmc3/antidote.git ${ZDOTDIR:-~}/.antidote
+fi
+
 
 CONFIG="mac.conf.yaml"
 CONFIG_DIR="confs"

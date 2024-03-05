@@ -10,6 +10,8 @@
     ~/.bashrc: sites/alcf/bashrc
     ~/.zshrc: sites/alcf/zshrc
     ~/.zshenv: sites/alcf/zshenv
+    ~/.zsh_plugins.txt: zsh_plugins.txt
+
 
 - shell:
   - [git submodule update --init --recursive, Installing submodules]
