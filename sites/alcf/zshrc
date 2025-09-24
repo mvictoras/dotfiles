@@ -32,10 +32,21 @@ alias scp='noglob scp'
 
 # autoload -U colors
 #colors
-if [[ $HOSTNAME = *theta* ]]; then
-  module load tmux
-fi
 
-if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
-  tmux -CC attach -t default || tmux -CC new -s default
+# Auto-start tmux in real interactive terminals, but not inside VS Code or existing tmux/screen
+is_interactive() { [[ $- == *i* ]]; }
+is_tty() { [[ -t 1 ]]; }
+
+if is_interactive && is_tty && command -v tmux >/dev/null 2>&1 \
+   && [[ -z "$TMUX" ]] \
+   && [[ "$TERM" != screen* && "$TERM" != tmux* ]] \
+   && [[ "$TERM_PROGRAM" != "vscode" ]] \
+   && [[ -z "$VSCODE_GIT_IPC_HANDLE" ]]; then
+
+  # Use iTerm2 control mode ONLY in iTerm2
+  if [[ "$LC_TERMINAL" == "iTerm2" || "$TERM_PROGRAM" == "iTerm.app" ]]; then
+    tmux -CC attach -t default 2>/dev/null || tmux -CC new -s default
+  else
+    tmux attach -t default 2>/dev/null || tmux new -s default
+  fi
 fi
