@@ -5,9 +5,9 @@
 - clean: ['~']
 
 - link:
-    ~/.vim: SpaceVim
     ~/.SpaceVim.d: SpaceVim.d
     ~/.zshrc: sites/mac/zshrc
+    ~/.zsh_plugins.txt: zsh_plugins.txt
 
 - shell:
   - [git submodule update --init --recursive, Installing submodules]

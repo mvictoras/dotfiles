@@ -2,12 +2,6 @@
 	path = dotbot
 	url = https://github.com/anishathalye/dotbot
 	ignore = dirty
-[submodule "SpaceVim"]
-	path = SpaceVim
-	url = https://github.com/SpaceVim/SpaceVim.git
-[submodule "spack-config"]
-	path = spack-config
-	url = git@git.cels.anl.gov:vmateevitsi/spack-config.git
-[submodule "modules/ohmyzsh"]
-	path = modules/ohmyzsh
-	url = https://github.com/ohmyzsh/ohmyzsh.git
+[submodule "modules/p10k"]
+	path = modules/p10k
+	url = https://github.com/romkatv/powerlevel10k.git
