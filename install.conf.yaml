@@ -1,0 +1,124 @@
+- defaults:
+    link:
+      create: true
+      relink: true
+
+- clean: ['~']
+
+- link:
+    ~/.zshrc: zsh/.zshrc
+    ~/.p10k.zsh: zsh/.p10k.zsh
+    ~/.tmux.conf: tmux/.tmux.conf
+    ~/.config/lvim: lvim
+    #~/.zshenv: sites/alcf/zshenv
+    #~/.zsh_plugins.txt: zsh_plugins.txt
+
+- shell:
+  - description: "Ensure local bin dir exists and on PATH (future shells)"
+    command: |
+      #!/bin/sh
+      mkdir -p "$HOME/.local/bin" || true
+      # (Your .zshrc should already export PATH including ~/.local/bin.)
+
+  - description: "Install portable Neovim if missing (Linux/macOS, x86_64/arm64)"
+    command: |
+      #!/bin/sh
+      set -eu
+      VER="v0.10.4"
+
+      if command -v nvim >/dev/null 2>&1; then
+        echo "[dotbot] Neovim already present: $(command -v nvim)"
+        exit 0
+      fi
+
+      if ! command -v curl >/dev/null 2>&1; then
+        echo "[dotbot] curl not found; skipping Neovim install." >&2
+        exit 0
+      fi
+
+      OS="$(uname -s 2>/dev/null || echo unknown)"
+      ARCH="$(uname -m 2>/dev/null || echo unknown)"
+      case "$OS:$ARCH" in
+        Linux:x86_64)   PKG="nvim-linux-x86_64.tar.gz" ;;
+        Linux:aarch64)  PKG="nvim-linux-arm64.tar.gz" ;;
+        Darwin:arm64)   PKG="nvim-macos-arm64.tar.gz" ;;
+        Darwin:x86_64)  PKG="nvim-macos-x86_64.tar.gz" ;;
+        *) echo "[dotbot] Unsupported platform ($OS/$ARCH); skipping Neovim." >&2; exit 0 ;;
+      esac
+
+      URL="https://github.com/neovim/neovim/releases/download/$VER/$PKG"
+
+      APPS="$HOME/apps"
+      mkdir -p "$APPS" "$HOME/.local/bin"
+
+      tmpdir="$(mktemp -d 2>/dev/null || mktemp -d -t nvim)"
+      trap 'rm -rf "$tmpdir"' EXIT
+
+      echo "[dotbot] Fetching $URL ..."
+      if ! curl -fL "$URL" -o "$tmpdir/nvim.tgz"; then
+        echo "[dotbot] Failed to download Neovim (offline?). Skipping." >&2
+        exit 0
+      fi
+
+      tar -xzf "$tmpdir/nvim.tgz" -C "$APPS"
+
+      # Determine extracted dir name from archive top-level folder
+      topdir="$(tar -tzf "$tmpdir/nvim.tgz" | head -1 | cut -d/ -f1)"
+      if [ ! -d "$APPS/$topdir" ]; then
+        echo "[dotbot] Unexpected archive layout; skipping link." >&2
+        exit 0
+      fi
+
+      # Symlink to ~/.local/bin for a stable PATH
+      ln -sfn "$APPS/$topdir/bin/nvim" "$HOME/.local/bin/nvim"
+
+      echo "[dotbot] Installed Neovim -> $APPS/$topdir"
+      echo "[dotbot] Linked ~/.local/bin/nvim"
+
+  - description: "Install LunarVim if lvim missing (requires nvim)"
+    command: |
+      #!/bin/sh
+      set -eu
+
+      if ! command -v nvim >/dev/null 2>&1; then
+        echo "[dotbot] Skipping LunarVim: Neovim not found in PATH." >&2
+        exit 0
+      fi
+
+      if command -v lvim >/dev/null 2>&1; then
+        echo "[dotbot] LunarVim already installed."
+        exit 0
+      fi
+
+      if ! command -v curl >/dev/null 2>&1; then
+        echo "[dotbot] curl not found; skipping LunarVim install." >&2
+        exit 0
+      fi
+
+      tmpdir="$(mktemp -d 2>/dev/null || mktemp -d -t lvim)"
+      trap 'rm -rf "$tmpdir"' EXIT
+
+      # Prefer pinned branch; fall back to master
+      BRANCH_URL="https://raw.githubusercontent.com/LunarVim/LunarVim/release-1.4/neovim-0.9/utils/installer/install.sh"
+      MASTER_URL="https://raw.githubusercontent.com/LunarVim/LunarVim/master/utils/installer/install.sh"
+
+      if curl -fsSL "$BRANCH_URL" -o "$tmpdir/install.sh"; then
+        export LV_BRANCH="release-1.4/neovim-0.9"
+      elif curl -fsSL "$MASTER_URL" -o "$tmpdir/install.sh"; then
+        export LV_BRANCH="master"
+      else
+        echo "[dotbot] Could not fetch LunarVim installer (offline?). Skipping." >&2
+        exit 0
+      fi
+
+      chmod +x "$tmpdir/install.sh"
+
+      # Non-interactive, no system dependency installs (HPC-safe)
+      if ! bash "$tmpdir/install.sh" --yes --no-install-dependencies; then
+        echo "[dotbot] LunarVim installer exited non-zero; continuing." >&2
+      fi
+
+      # Ensure ~/.local/bin is on PATH for future shells (zshrc should handle this)
+      mkdir -p "$HOME/.local/bin" >/dev/null 2>&1 || true
+
+      echo "[dotbot] LunarVim step finished."

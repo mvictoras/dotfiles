@@ -3,5 +3,8 @@
 	url = https://github.com/anishathalye/dotbot
 	ignore = dirty
 [submodule "modules/p10k"]
-	path = modules/p10k
+	path = modules/powerlevel10k
 	url = https://github.com/romkatv/powerlevel10k.git
+[submodule "modules/ohmyzsh"]
+	path = modules/ohmyzsh
+	url = https://github.com/ohmyzsh/ohmyzsh.git
