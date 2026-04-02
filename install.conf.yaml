@@ -7,12 +7,23 @@
 
 - link:
     modules/ohmyzsh/custom/themes/powerlevel10k: modules/powerlevel10k
+    modules/ohmyzsh/custom/plugins/zsh-autosuggestions: modules/zsh-autosuggestions
+    modules/ohmyzsh/custom/plugins/zsh-syntax-highlighting: modules/zsh-syntax-highlighting
     ~/.zshrc: zsh/.zshrc
     ~/.p10k.zsh: zsh/.p10k.zsh
     ~/.tmux.conf: tmux/.tmux.conf
     ~/.config/lvim: lvim
 
 - shell:
+  - description: "Install Brewfile packages when Homebrew is available"
+    command: |
+      #!/bin/sh
+      if command -v brew >/dev/null 2>&1; then
+        brew bundle --file="$HOME/.dotfiles/Brewfile" || true
+      else
+        echo "[dotbot] Homebrew not found; skipping Brewfile packages."
+      fi
+
   - description: "Ensure local bin dir exists and on PATH (future shells)"
     command: |
       #!/bin/sh
