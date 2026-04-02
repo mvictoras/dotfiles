@@ -20,12 +20,9 @@ if is_ssh then
   require("nvim-web-devicons").setup { default = true, override = {} }
 end
 
--- Ensure LSP servers are still installed
-lvim.lsp.installer.setup.ensure_installed = { "clangd", "pyright", "lua_ls" }
+-- LSP servers to install (basedpyright preferred over pyright to avoid Node on HPC)
+lvim.lsp.installer.setup.ensure_installed = { "clangd", "basedpyright", "lua_ls" }
 lvim.format_on_save = { enabled = true }
-
--- Prefer basedpyright (pip) to avoid Node on HPC
-lvim.lsp.installer.setup.ensure_installed = { "basedpyright" }
 
 -- Prefer GCC/Clang compilers for parser builds (avoid NVHPC `nvc`)
 pcall(function()
