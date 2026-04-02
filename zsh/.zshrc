@@ -86,3 +86,6 @@ else
 fi
 
 unset VIMRUNTIME
+
+# opencode
+export PATH=/home/mvictoras/.opencode/bin:$PATH

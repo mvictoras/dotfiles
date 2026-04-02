@@ -2,7 +2,7 @@
 	path = dotbot
 	url = https://github.com/anishathalye/dotbot
 	ignore = dirty
-[submodule "modules/p10k"]
+[submodule "modules/powerlevel10k"]
 	path = modules/powerlevel10k
 	url = https://github.com/romkatv/powerlevel10k.git
 [submodule "modules/ohmyzsh"]
