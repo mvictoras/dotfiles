@@ -27,11 +27,18 @@ export LC_ALL=${LC_ALL:-en_US.UTF-8}
 [[ -r "$HOME/.p10k.zsh" ]] && source "$HOME/.p10k.zsh"
 
 # --- oh-my-zsh (minimal & fast)
+OMZ_EXTRA_PLUGINS=()
+[[ -r "$ZSH/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh" ]] && OMZ_EXTRA_PLUGINS+=(zsh-autosuggestions)
+[[ -r "$ZSH/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.plugin.zsh" ]] && OMZ_EXTRA_PLUGINS+=(zsh-syntax-highlighting)
+
 if [[ -r "$ZSH/oh-my-zsh.sh" ]]; then
   ZSH_THEME="powerlevel10k/powerlevel10k"
-  plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
+  plugins=(git ${OMZ_EXTRA_PLUGINS[@]})
   source "$ZSH/oh-my-zsh.sh"
 fi
+
+[[ -r "$DOTFILES_DIR/modules/zsh-autosuggestions/zsh-autosuggestions.zsh" && ! " ${OMZ_EXTRA_PLUGINS[*]} " =~ " zsh-autosuggestions " ]] && source "$DOTFILES_DIR/modules/zsh-autosuggestions/zsh-autosuggestions.zsh"
+[[ -r "$DOTFILES_DIR/modules/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" && ! " ${OMZ_EXTRA_PLUGINS[*]} " =~ " zsh-syntax-highlighting " ]] && source "$DOTFILES_DIR/modules/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 
 # --- QoL options
 setopt COMPLETE_IN_WORD
