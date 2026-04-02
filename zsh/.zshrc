@@ -56,8 +56,8 @@ fi
 
 # --- ALCF proxy settings
 is_alcf_host() {
-  [[ "$HOST" == *.alcf.anl.gov || "$HOST" == *.alcf.anl.gov.* || "$HOST" == *alcf.anl.gov* \
-     || "$REMOTEHOST" == *.alcf.anl.gov || "$REMOTEHOST" == *.alcf.anl.gov.* || "$REMOTEHOST" == *alcf.anl.gov* ]]
+  [[ "$HOST" == sophia* || "$HOST" == *.alcf.anl.gov.* || "$HOST" == *alcf.anl.gov* \
+     || "$REMOTEHOST" == sophia* || "$REMOTEHOST" == *.alcf.anl.gov.* || "$REMOTEHOST" == *alcf.anl.gov* ]]
 }
 if is_alcf_host; then
   export HTTP_PROXY="http://proxy.alcf.anl.gov:3128"
