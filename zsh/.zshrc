@@ -29,7 +29,7 @@ export LC_ALL=${LC_ALL:-en_US.UTF-8}
 # --- oh-my-zsh (minimal & fast)
 if [[ -r "$ZSH/oh-my-zsh.sh" ]]; then
   ZSH_THEME="powerlevel10k/powerlevel10k"
-  plugins=(git)    # keep lean for HPC; add more as needed
+  plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
   source "$ZSH/oh-my-zsh.sh"
 fi
 
@@ -37,23 +37,30 @@ fi
 setopt COMPLETE_IN_WORD
 alias scp='noglob scp'
 
-# --- VSCode-safe tmux auto-start
+# --- Remote-only tmux auto-start (useful for SSH/HPC sessions)
 is_interactive() { [[ $- == *i* ]]; }
 is_tty()         { [[ -t 1 ]]; }
+is_remote_shell() {
+  [[ -n "$SSH_CONNECTION" || -n "$SSH_TTY" || -n "$SSH_CLIENT" || -n "$REMOTEHOST" ]]
+}
 if is_interactive && is_tty \
+   && is_remote_shell \
    && command -v tmux >/dev/null 2>&1 \
    && [[ -z "$TMUX" ]] \
    && [[ "$TERM" != screen* && "$TERM" != tmux* ]] \
    && [[ "$TERM_PROGRAM" != "vscode" ]] \
    && [[ -z "$VSCODE_GIT_IPC_HANDLE" ]]; then
 
-  if [[ "$LC_TERMINAL" == "iTerm2" || "$TERM_PROGRAM" == "iTerm.app" ]]; then
-    tmux -CC attach -t default 2>/dev/null || tmux -CC new -s default
-  else
-    tmux attach -t default 2>/dev/null || tmux new -s default
-  fi
+  tmux attach -t default 2>/dev/null || tmux new -s default
 fi
 alias t='tmux attach -t default 2>/dev/null || tmux new -s default'
+alias ff='fd --type f | fzf'
+alias cdf='cd "$(fd --type d | fzf)"'
+alias rgi='rg --ignore-case'
+
+fif() {
+  rg --ignore-case --line-number --no-heading "$@" | fzf
+}
 
 # --- Editor defaults
 export EDITOR="nvim"
@@ -85,6 +92,10 @@ export PATH="$HOME.opencode/bin:$PATH"
 export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
 command -v pyenv >/dev/null 2>&1 && eval "$(pyenv init - zsh)"
+
+if command -v fzf >/dev/null 2>&1; then
+  eval "$(fzf --zsh)"
+fi
 
 # Added by Antigravity
 [[ -d "$HOME/.antigravity/antigravity/bin" ]] && export PATH="$HOME/.antigravity/antigravity/bin:$PATH"
