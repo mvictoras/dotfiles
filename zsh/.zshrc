@@ -75,6 +75,25 @@ if is_alcf_host; then
   export no_proxy="admin,polaris-adminvm-01,localhost,*.cm.polaris.alcf.anl.gov,polaris-*,*.polaris.alcf.anl.gov,*.alcf.anl.gov"
   export GRAND="/lus/grand/projects/visualization/mvictoras/"
   alias grand='cd $GRAND'
+  q() {
+    if [[ $# -lt 2 || $# -gt 3 ]]; then
+      print "usage: q project time_in_hours [queue]"
+      return 1
+    fi
+
+    local project="$1"
+    local hours="$2"
+    local queue="${3:-visualization}"
+    local walltime
+
+    if [[ ! "$hours" =~ '^[0-9]+$' ]]; then
+      print "q: time_in_hours must be an integer"
+      return 1
+    fi
+
+    printf -v walltime '%02d:00:00' "$hours"
+    qsub -I -l select=1 -l filesystems=home:eagle -l walltime="$walltime" -q "$queue" -A "$project" -I
+  }
 fi
 alias t='tmux attach -t default 2>/dev/null || tmux new -s default'
 alias ff='fd --type f | fzf'
