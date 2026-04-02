@@ -66,6 +66,8 @@ if is_alcf_host; then
   export https_proxy="http://proxy.alcf.anl.gov:3128"
   export ftp_proxy="http://proxy.alcf.anl.gov:3128"
   export no_proxy="admin,polaris-adminvm-01,localhost,*.cm.polaris.alcf.anl.gov,polaris-*,*.polaris.alcf.anl.gov,*.alcf.anl.gov"
+  export GRAND="/lus/grand/projects/visualization/mvictoras/"
+  alias grand='cd $GRAND'
 fi
 alias t='tmux attach -t default 2>/dev/null || tmux new -s default'
 alias ff='fd --type f | fzf'
