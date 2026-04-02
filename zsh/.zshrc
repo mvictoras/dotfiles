@@ -16,7 +16,7 @@ case $- in *i*) ;; *) return ;; esac
 : ${DOTFILES_DIR:="$HOME/.dotfiles"}
 
 # --- Paths to modules (oh-my-zsh / powerlevel10k live in ./modules)
-export ZSH="$DOTFILES_DIR/modules/oh-my-zsh"
+export ZSH="$DOTFILES_DIR/modules/ohmyzsh"
 export P10K_ROOT="$DOTFILES_DIR/modules/powerlevel10k"
 
 # Locale (UTF-8 everywhere)
@@ -33,16 +33,9 @@ if [[ -r "$ZSH/oh-my-zsh.sh" ]]; then
   source "$ZSH/oh-my-zsh.sh"
 fi
 
-# Fallback: load p10k theme directly if oh-my-zsh didn't set it
-if [[ -r "$P10K_ROOT/powerlevel10k.zsh-theme" ]]; then
-  source "$P10K_ROOT/powerlevel10k.zsh-theme"
-fi
-
 # --- QoL options
 setopt COMPLETE_IN_WORD
 alias scp='noglob scp'
-export LC_ALL=${LC_ALL:-C}
-export LANG=${LANG:-C}
 
 # --- VSCode-safe tmux auto-start
 is_interactive() { [[ $- == *i* ]]; }
@@ -86,3 +79,17 @@ else
 fi
 
 unset VIMRUNTIME
+
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+command -v pyenv >/dev/null 2>&1 && eval "$(pyenv init - zsh)"
+
+# Added by Antigravity
+[[ -d "$HOME/.antigravity/antigravity/bin" ]] && export PATH="$HOME/.antigravity/antigravity/bin:$PATH"
+
+# bun completions
+[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"

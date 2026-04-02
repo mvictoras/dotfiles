@@ -6,12 +6,11 @@
 - clean: ['~']
 
 - link:
+    modules/ohmyzsh/custom/themes/powerlevel10k: modules/powerlevel10k
     ~/.zshrc: zsh/.zshrc
     ~/.p10k.zsh: zsh/.p10k.zsh
     ~/.tmux.conf: tmux/.tmux.conf
     ~/.config/lvim: lvim
-    #~/.zshenv: sites/alcf/zshenv
-    #~/.zsh_plugins.txt: zsh_plugins.txt
 
 - shell:
   - description: "Ensure local bin dir exists and on PATH (future shells)"
