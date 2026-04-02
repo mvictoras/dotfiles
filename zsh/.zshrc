@@ -53,6 +53,20 @@ if is_interactive && is_tty \
 
   tmux attach -t default 2>/dev/null || tmux new -s default
 fi
+
+# --- ALCF proxy settings
+is_alcf_host() {
+  [[ "$HOST" == *.alcf.anl.gov || "$HOST" == *.alcf.anl.gov.* || "$HOST" == *alcf.anl.gov* \
+     || "$REMOTEHOST" == *.alcf.anl.gov || "$REMOTEHOST" == *.alcf.anl.gov.* || "$REMOTEHOST" == *alcf.anl.gov* ]]
+}
+if is_alcf_host; then
+  export HTTP_PROXY="http://proxy.alcf.anl.gov:3128"
+  export HTTPS_PROXY="http://proxy.alcf.anl.gov:3128"
+  export http_proxy="http://proxy.alcf.anl.gov:3128"
+  export https_proxy="http://proxy.alcf.anl.gov:3128"
+  export ftp_proxy="http://proxy.alcf.anl.gov:3128"
+  export no_proxy="admin,polaris-adminvm-01,localhost,*.cm.polaris.alcf.anl.gov,polaris-*,*.polaris.alcf.anl.gov,*.alcf.anl.gov"
+fi
 alias t='tmux attach -t default 2>/dev/null || tmux new -s default'
 alias ff='fd --type f | fzf'
 alias cdf='cd "$(fd --type d | fzf)"'

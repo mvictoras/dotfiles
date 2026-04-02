@@ -136,6 +136,15 @@ When working over SSH, LunarVim automatically disables some UI features for spee
 
 This is intentional for remote/HPC environments.
 
+### ALCF / HPC shell behavior
+On ALCF hosts:
+- tmux auto-starts so your session survives disconnects
+- ALCF proxy variables are exported automatically
+
+On your local Mac:
+- tmux does not auto-start
+- ALCF proxy variables are not set
+
 ### Editor command behavior
 ```bash
 vi file.txt
