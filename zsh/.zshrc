@@ -143,7 +143,7 @@ fi
 unset VIMRUNTIME
 
 # opencode
-export PATH="$HOME.opencode/bin:$PATH"
+export PATH="$HOME/.opencode/bin:$PATH"
 export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
 command -v pyenv >/dev/null 2>&1 && eval "$(pyenv init - zsh)"
