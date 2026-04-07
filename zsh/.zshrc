@@ -19,6 +19,15 @@ case $- in *i*) ;; *) return ;; esac
 export ZSH="$DOTFILES_DIR/modules/ohmyzsh"
 export P10K_ROOT="$DOTFILES_DIR/modules/powerlevel10k"
 
+is_polaris_compute_node() {
+  [[ "$HOST" == *.hsn.cm.polaris.alcf.anl.gov || "$REMOTEHOST" == *.hsn.cm.polaris.alcf.anl.gov ]]
+}
+
+# Polaris compute nodes may not have tmux-256color terminfo installed.
+if is_polaris_compute_node && [[ "$TERM" == "tmux-256color" ]]; then
+  export TERM="screen-256color"
+fi
+
 # Locale (UTF-8 everywhere)
 export LANG=${LANG:-en_US.UTF-8}
 export LC_ALL=${LC_ALL:-en_US.UTF-8}
@@ -26,17 +35,25 @@ export LC_ALL=${LC_ALL:-en_US.UTF-8}
 # --- Powerlevel10k instant prompt: source user config if present
 [[ -r "$HOME/.p10k.zsh" ]] && source "$HOME/.p10k.zsh"
 
-is_polaris_compute_node() {
-  [[ "$HOST" == *.hsn.cm.polaris.alcf.anl.gov || "$REMOTEHOST" == *.hsn.cm.polaris.alcf.anl.gov ]]
-}
-
 # Keep prompt simpler on Polaris compute nodes where terminal capabilities are often reduced.
 if is_polaris_compute_node; then
-  typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(os_icon dir)
-  typeset -g POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status time)
+  typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(dir prompt_char)
+  typeset -g POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=()
   typeset -g POWERLEVEL9K_CONTEXT_{DEFAULT,SUDO,REMOTE,REMOTE_SUDO}_{CONTENT,VISUAL_IDENTIFIER}_EXPANSION=
-  typeset -g POWERLEVEL9K_DIR_MAX_LENGTH=40
-  typeset -g POWERLEVEL9K_TIME_FORMAT='%D{%H:%M:%S}'
+  typeset -g POWERLEVEL9K_DIR_MAX_LENGTH=30
+  typeset -g POWERLEVEL9K_PROMPT_ADD_NEWLINE=false
+  typeset -g POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX=
+  typeset -g POWERLEVEL9K_MULTILINE_NEWLINE_PROMPT_PREFIX=
+  typeset -g POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX=
+  typeset -g POWERLEVEL9K_MULTILINE_FIRST_PROMPT_SUFFIX=
+  typeset -g POWERLEVEL9K_MULTILINE_NEWLINE_PROMPT_SUFFIX=
+  typeset -g POWERLEVEL9K_MULTILINE_LAST_PROMPT_SUFFIX=
+  typeset -g POWERLEVEL9K_LEFT_PROMPT_FIRST_SEGMENT_START_SYMBOL=
+  typeset -g POWERLEVEL9K_LEFT_PROMPT_LAST_SEGMENT_END_SYMBOL=
+  typeset -g POWERLEVEL9K_RIGHT_PROMPT_FIRST_SEGMENT_START_SYMBOL=
+  typeset -g POWERLEVEL9K_RIGHT_PROMPT_LAST_SEGMENT_END_SYMBOL=
+  typeset -g POWERLEVEL9K_LEFT_SUBSEGMENT_SEPARATOR=' '
+  typeset -g POWERLEVEL9K_RIGHT_SUBSEGMENT_SEPARATOR=' '
 fi
 
 # --- oh-my-zsh (minimal & fast)
