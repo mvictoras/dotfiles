@@ -26,6 +26,19 @@ export LC_ALL=${LC_ALL:-en_US.UTF-8}
 # --- Powerlevel10k instant prompt: source user config if present
 [[ -r "$HOME/.p10k.zsh" ]] && source "$HOME/.p10k.zsh"
 
+is_polaris_compute_node() {
+  [[ "$HOST" == *.hsn.cm.polaris.alcf.anl.gov || "$REMOTEHOST" == *.hsn.cm.polaris.alcf.anl.gov ]]
+}
+
+# Keep prompt simpler on Polaris compute nodes where terminal capabilities are often reduced.
+if is_polaris_compute_node; then
+  typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(os_icon dir)
+  typeset -g POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status time)
+  typeset -g POWERLEVEL9K_CONTEXT_{DEFAULT,SUDO,REMOTE,REMOTE_SUDO}_{CONTENT,VISUAL_IDENTIFIER}_EXPANSION=
+  typeset -g POWERLEVEL9K_DIR_MAX_LENGTH=40
+  typeset -g POWERLEVEL9K_TIME_FORMAT='%D{%H:%M:%S}'
+fi
+
 # --- oh-my-zsh (minimal & fast)
 OMZ_EXTRA_PLUGINS=()
 [[ -r "$ZSH/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh" ]] && OMZ_EXTRA_PLUGINS+=(zsh-autosuggestions)
