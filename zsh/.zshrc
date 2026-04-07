@@ -32,44 +32,33 @@ fi
 export LANG=${LANG:-en_US.UTF-8}
 export LC_ALL=${LC_ALL:-en_US.UTF-8}
 
-# --- Powerlevel10k instant prompt: source user config if present
-[[ -r "$HOME/.p10k.zsh" ]] && source "$HOME/.p10k.zsh"
-
-# Keep prompt simpler on Polaris compute nodes where terminal capabilities are often reduced.
 if is_polaris_compute_node; then
-  typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(dir prompt_char)
-  typeset -g POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=()
-  typeset -g POWERLEVEL9K_CONTEXT_{DEFAULT,SUDO,REMOTE,REMOTE_SUDO}_{CONTENT,VISUAL_IDENTIFIER}_EXPANSION=
-  typeset -g POWERLEVEL9K_DIR_MAX_LENGTH=30
-  typeset -g POWERLEVEL9K_PROMPT_ADD_NEWLINE=false
-  typeset -g POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX=
-  typeset -g POWERLEVEL9K_MULTILINE_NEWLINE_PROMPT_PREFIX=
-  typeset -g POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX=
-  typeset -g POWERLEVEL9K_MULTILINE_FIRST_PROMPT_SUFFIX=
-  typeset -g POWERLEVEL9K_MULTILINE_NEWLINE_PROMPT_SUFFIX=
-  typeset -g POWERLEVEL9K_MULTILINE_LAST_PROMPT_SUFFIX=
-  typeset -g POWERLEVEL9K_LEFT_PROMPT_FIRST_SEGMENT_START_SYMBOL=
-  typeset -g POWERLEVEL9K_LEFT_PROMPT_LAST_SEGMENT_END_SYMBOL=
-  typeset -g POWERLEVEL9K_RIGHT_PROMPT_FIRST_SEGMENT_START_SYMBOL=
-  typeset -g POWERLEVEL9K_RIGHT_PROMPT_LAST_SEGMENT_END_SYMBOL=
-  typeset -g POWERLEVEL9K_LEFT_SUBSEGMENT_SEPARATOR=' '
-  typeset -g POWERLEVEL9K_RIGHT_SUBSEGMENT_SEPARATOR=' '
+  # Minimal compute-node shell: skip powerlevel10k and oh-my-zsh for stability.
+  unset RPROMPT
+  PROMPT='%F{blue}%~%f %# '
   print -n -- $'\e[?1l\e>'
+
+  TRAPWINCH() {
+    zle && zle reset-prompt
+  }
+else
+  # --- Powerlevel10k instant prompt: source user config if present
+  [[ -r "$HOME/.p10k.zsh" ]] && source "$HOME/.p10k.zsh"
+
+  # --- oh-my-zsh (minimal & fast)
+  OMZ_EXTRA_PLUGINS=()
+  [[ -r "$ZSH/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh" ]] && OMZ_EXTRA_PLUGINS+=(zsh-autosuggestions)
+  [[ -r "$ZSH/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.plugin.zsh" ]] && OMZ_EXTRA_PLUGINS+=(zsh-syntax-highlighting)
+
+  if [[ -r "$ZSH/oh-my-zsh.sh" ]]; then
+    ZSH_THEME="powerlevel10k/powerlevel10k"
+    plugins=(git ${OMZ_EXTRA_PLUGINS[@]})
+    source "$ZSH/oh-my-zsh.sh"
+  fi
+
+  [[ -r "$DOTFILES_DIR/modules/zsh-autosuggestions/zsh-autosuggestions.zsh" && ! " ${OMZ_EXTRA_PLUGINS[*]} " =~ " zsh-autosuggestions " ]] && source "$DOTFILES_DIR/modules/zsh-autosuggestions/zsh-autosuggestions.zsh"
+  [[ -r "$DOTFILES_DIR/modules/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" && ! " ${OMZ_EXTRA_PLUGINS[*]} " =~ " zsh-syntax-highlighting " ]] && source "$DOTFILES_DIR/modules/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 fi
-
-# --- oh-my-zsh (minimal & fast)
-OMZ_EXTRA_PLUGINS=()
-[[ -r "$ZSH/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh" ]] && OMZ_EXTRA_PLUGINS+=(zsh-autosuggestions)
-[[ -r "$ZSH/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.plugin.zsh" ]] && OMZ_EXTRA_PLUGINS+=(zsh-syntax-highlighting)
-
-if [[ -r "$ZSH/oh-my-zsh.sh" ]]; then
-  ZSH_THEME="powerlevel10k/powerlevel10k"
-  plugins=(git ${OMZ_EXTRA_PLUGINS[@]})
-  source "$ZSH/oh-my-zsh.sh"
-fi
-
-[[ -r "$DOTFILES_DIR/modules/zsh-autosuggestions/zsh-autosuggestions.zsh" && ! " ${OMZ_EXTRA_PLUGINS[*]} " =~ " zsh-autosuggestions " ]] && source "$DOTFILES_DIR/modules/zsh-autosuggestions/zsh-autosuggestions.zsh"
-[[ -r "$DOTFILES_DIR/modules/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" && ! " ${OMZ_EXTRA_PLUGINS[*]} " =~ " zsh-syntax-highlighting " ]] && source "$DOTFILES_DIR/modules/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 
 # --- QoL options
 setopt COMPLETE_IN_WORD
