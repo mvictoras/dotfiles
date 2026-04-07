@@ -25,7 +25,7 @@ is_polaris_compute_node() {
 
 # Polaris compute nodes may not have tmux-256color terminfo installed.
 if is_polaris_compute_node && [[ "$TERM" == "tmux-256color" ]]; then
-  export TERM="screen-256color"
+  export TERM="xterm-256color"
 fi
 
 # Locale (UTF-8 everywhere)
@@ -54,6 +54,7 @@ if is_polaris_compute_node; then
   typeset -g POWERLEVEL9K_RIGHT_PROMPT_LAST_SEGMENT_END_SYMBOL=
   typeset -g POWERLEVEL9K_LEFT_SUBSEGMENT_SEPARATOR=' '
   typeset -g POWERLEVEL9K_RIGHT_SUBSEGMENT_SEPARATOR=' '
+  print -n -- $'\e[?1l\e>'
 fi
 
 # --- oh-my-zsh (minimal & fast)
@@ -73,6 +74,11 @@ fi
 # --- QoL options
 setopt COMPLETE_IN_WORD
 alias scp='noglob scp'
+
+bindkey '^[[A' up-line-or-history
+bindkey '^[[B' down-line-or-history
+bindkey '^[OA' up-line-or-history
+bindkey '^[OB' down-line-or-history
 
 # --- Remote-only tmux auto-start (useful for SSH/HPC sessions)
 is_interactive() { [[ $- == *i* ]]; }
@@ -167,6 +173,14 @@ command -v pyenv >/dev/null 2>&1 && eval "$(pyenv init - zsh)"
 
 if command -v fzf >/dev/null 2>&1; then
   eval "$(fzf --zsh)"
+fi
+
+if is_polaris_compute_node && command -v opencode >/dev/null 2>&1; then
+  opencode-safe() {
+    print -n -- $'\e[?1l\e>'
+    TERM=xterm-256color command opencode "$@"
+  }
+  alias opencode='opencode-safe'
 fi
 
 # Added by Antigravity
