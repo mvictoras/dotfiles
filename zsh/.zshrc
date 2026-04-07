@@ -88,7 +88,12 @@ if is_interactive && is_tty \
   tmux_tty="${TTY:t}"
   tmux_tty="${tmux_tty//[^[:alnum:]_-]/-}"
   tmux_session="${tmux_host}-${tmux_tty}"
-  tmux attach -t "$tmux_session" 2>/dev/null || tmux new -s "$tmux_session"
+
+  if [[ "$LC_TERMINAL" == "iTerm2" || "$TERM_PROGRAM" == "iTerm.app" ]]; then
+    tmux -CC attach -t "$tmux_session" 2>/dev/null || tmux -CC new -s "$tmux_session"
+  else
+    tmux attach -t "$tmux_session" 2>/dev/null || tmux new -s "$tmux_session"
+  fi
 fi
 
 # --- ALCF proxy settings
