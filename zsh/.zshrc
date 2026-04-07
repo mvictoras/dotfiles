@@ -83,7 +83,12 @@ if is_interactive && is_tty \
    && [[ "$TERM_PROGRAM" != "vscode" ]] \
    && [[ -z "$VSCODE_GIT_IPC_HANDLE" ]]; then
 
-  tmux attach -t default 2>/dev/null || tmux new -s default
+  local tmux_host tmux_tty tmux_session
+  tmux_host="$(hostname -s 2>/dev/null || print -r -- remote)"
+  tmux_tty="${TTY:t}"
+  tmux_tty="${tmux_tty//[^[:alnum:]_-]/-}"
+  tmux_session="${tmux_host}-${tmux_tty}"
+  tmux attach -t "$tmux_session" 2>/dev/null || tmux new -s "$tmux_session"
 fi
 
 # --- ALCF proxy settings
