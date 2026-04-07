@@ -176,7 +176,9 @@ fi
 
 if is_polaris_compute_node && command -v opencode >/dev/null 2>&1; then
   opencode-safe() {
+    stty sane 2>/dev/null || true
     print -n -- $'\e[?1l\e>'
+    print -n -- $'\e>'
     TERM=xterm-256color command opencode "$@"
   }
   alias opencode='opencode-safe'
